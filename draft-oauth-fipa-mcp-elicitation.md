@@ -5,6 +5,7 @@ docname: draft-embesozzi-oauth-fipa-mcp-elicitation
 date: 2026-03-09
 category: info
 submissiontype: independent
+ipr: trust200902
 
 area: Security
 workgroup: Independent Submission
@@ -50,7 +51,6 @@ informative:
       org: FIDO Alliance
 
 ---
-
 --- abstract
 
 The OAuth 2.0 First-Party Applications (FiPA) specification defines a
@@ -502,17 +502,3 @@ TODO
 TODO Security
 
 --- back
-
-# 11. Normative References
-
-- [FiPA] IETF OAuth Working Group, "OAuth 2.0 First-Party Applications". https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps/
-- [RFC6749] Hardt, D., "The OAuth 2.0 Authorization Framework", RFC 6749, October 2012. https://www.rfc-editor.org/rfc/rfc6749
-- [RFC8628] Denniss, W. et al., "OAuth 2.0 Device Authorization Grant", RFC 8628, August 2019. https://www.rfc-editor.org/rfc/rfc8628
-- [RFC9700] Lodderstedt, T. et al., "Best Current Practice for OAuth 2.0 Security", RFC 9700. https://www.rfc-editor.org/rfc/rfc9700
-- [CIBA] OpenID Foundation, "OpenID Connect Client-Initiated Backchannel Authentication Flow — Core 1.0". https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html
-- [MCP-Elicitation] Anthropic, "Model Context Protocol Specification — Elicitation". https://spec.modelcontextprotocol.io
-- [WebAuthn] W3C, "Web Authentication: An API for accessing Public Key Credentials, Level 3". https://www.w3.org/TR/webauthn/
-
-# 12. Informative References
-
-- [FIDO-CTAP] FIDO Alliance, "Client to Authenticator Protocol (CTAP) 2.2". https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html
