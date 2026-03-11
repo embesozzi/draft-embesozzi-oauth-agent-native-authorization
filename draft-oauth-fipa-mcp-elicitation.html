@@ -1306,7 +1306,7 @@ Passkey handling.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-1.1-5">This extension applies to deployments where:<a href="#section-1.1-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.1-6.1">
-            <p id="section-1.1-6.1.1">The client is an AI Agent or autonomous agent communicating over MCP.<a href="#section-1.1-6.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-6.1.1">The client is an AI Agent communicating over MCP.<a href="#section-1.1-6.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.1-6.2">
             <p id="section-1.1-6.2.1">The authorization server supports the FiPA challenge/response protocol.<a href="#section-1.1-6.2.1" class="pilcrow">¶</a></p>
@@ -1542,7 +1542,8 @@ WWW-Authenticate: Bearer realm="authorization-server",
         <h3 id="name-51-authorization-challenge-">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-51-authorization-challenge-" class="section-name selfRef">5.1 Authorization Challenge Response</a>
         </h3>
-<div class="lang-http sourcecode" id="section-5.1-1">
+<p id="section-5.1-1">When multiple authenticators are supported, the authorization server returns a selection prompt:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-5.1-2">
 <pre>
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
@@ -1571,7 +1572,36 @@ Content-Type: application/json
     }
   ]
 }
-</pre><a href="#section-5.1-1" class="pilcrow">¶</a>
+</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-3">When only one authenticator is supported, the authorization server directly requests the required credential without presenting a choice:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-5.1-4">
+<pre>
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "error": "insufficient_authorization",
+  "auth_session": "sess_abc123",
+  "elicitations": [
+    {
+      "mode": "form",
+      "message": "Additional verification is required. Enter your one-time passcode.",
+      "requestedSchema": {
+        "type": "object",
+        "properties": {
+          "totp_code": {
+            "type": "string",
+            "title": "One-Time Passcode",
+            "description": "Enter the 6-digit code from your authenticator app."
+          }
+        },
+        "required": ["totp_code"]
+      }
+    }
+  ]
+}
+</pre><a href="#section-5.1-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
