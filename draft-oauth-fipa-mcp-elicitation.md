@@ -94,7 +94,7 @@ Without a standard for this metadata, every authorization server invents its own
 
 This extension applies to deployments where:
 
-- The client is an AI Agent or autonomous agent communicating over MCP.
+- The client is an AI Agent communicating over MCP.
 - The authorization server supports the FiPA challenge/response protocol.
 - The agent runtime supports MCP Elicitation as defined in [MCP-Elicitation].
 
@@ -217,6 +217,8 @@ When additional authentication is required, the first elicitation presents the a
 
 ## 5.1 Authorization Challenge Response
 
+When multiple authenticators are supported, the authorization server returns a selection prompt:
+
 ~~~ http
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
@@ -241,6 +243,35 @@ Content-Type: application/json
           }
         },
         "required": ["authenticator"]
+      }
+    }
+  ]
+}
+~~~
+
+When only one authenticator is supported, the authorization server directly requests the required credential without presenting a choice:
+
+~~~ http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "error": "insufficient_authorization",
+  "auth_session": "sess_abc123",
+  "elicitations": [
+    {
+      "mode": "form",
+      "message": "Additional verification is required. Enter your one-time passcode.",
+      "requestedSchema": {
+        "type": "object",
+        "properties": {
+          "totp_code": {
+            "type": "string",
+            "title": "One-Time Passcode",
+            "description": "Enter the 6-digit code from your authenticator app."
+          }
+        },
+        "required": ["totp_code"]
       }
     }
   ]
