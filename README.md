@@ -13,23 +13,14 @@ metadata format for FiPA authorization challenge responses. FiPA intentionally
 leaves authenticator metadata out of scope: the format in which the
 authorization server describes available authenticators and the inputs they
 require is undefined. This gap prevents interoperable implementation by AI
-Agents, CLI tools, and other non-browser clients.
+Agents and other non-browser clients.
 
-Model Context Protocol (MCP) Elicitation serves as the normative reference
-implementation of the Structured Elicitation mechanism. The extension
-addresses Human-to-Agent (H2A) communication patterns in which a human user
-interacts with an AI Agent acting as the FiPA client on their behalf. The
-scope covers two strong authenticator types: Authenticator Apps (TOTP) and
-Passkeys (WebAuthn). Password authentication is explicitly out of scope. The
-same pattern is extensible to other authenticator types by defining additional
-`requestedSchema` structures.
-
-The extension is specified across two deployment types: Third-Party AI Agents
-(e.g., Claude, GitHub Copilot), where the client runtime is provided by a
-third party and cannot be modified; and First-Party AI Agents, where the
-implementer controls the agent code. Both deployment types share the same
-FiPA challenge/response wire format and Structured Elicitation protocol,
-differing only in Passkey handling.
+The extension defines a transport-agnostic Structured Elicitation mechanism.
+Model Context Protocol (MCP) Elicitation serves as the normative runtime
+binding; a non-normative binding for HTTP-based AI Agent APIs is also
+provided. The scope covers two strong authenticator types: Authenticator
+Apps (TOTP) and Passkeys (WebAuthn). Non-normative guidance for Third-Party
+and First-Party AI Agent deployment patterns is included.
 
 ## Documents
 

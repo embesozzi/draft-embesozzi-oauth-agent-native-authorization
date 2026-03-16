@@ -119,8 +119,8 @@ This extension applies to deployments where:
 
 ## 1.2 Human-to-Agent (H2A) Communication Model
 
-This extension addresses the Human-to-Agent (H2A) communication pattern, as
-described in [CAAM].  In this pattern, a human user interacts with an AI Agent
+This extension addresses the Human-to-Agent (H2A) communication pattern.
+In this pattern, a human user interacts with an AI Agent
 that acts as a first-party OAuth client on their behalf.  The AI Agent
 orchestrates the FiPA challenge/response cycle but cannot independently
 satisfy authentication challenges that require human interaction — such as
@@ -146,9 +146,6 @@ This document does not define:
 - Capability negotiation between the agent runtime and the authorization
   server. Implementations MUST use application-specific mechanisms until FiPA
   defines a negotiation mechanism.
-- A new first-class Structured Elicitation mode for WebAuthn. The
-  `"format": "webauthn-get"` mechanism defined in Section 8 is a
-  FiPA-specific extension over the existing form mode.
 - Changes to the FiPA wire format beyond the `elicitations` array extension.
 
 ## 1.4 Deployment Types
@@ -592,36 +589,7 @@ ceremony is performed in-band: no browser, no redirect.
 This section defines how the authorization server delivers WebAuthn challenge
 parameters to the agent through Structured Elicitation form mode.
 
-Structured Elicitation form mode (Section 4.3) `requestedSchema` supports
-string properties with `format` and `x-` (extension) properties. JSON Schema
-permits `x-` prefixed extension keywords. When using MCP Elicitation, the
-agent recognizes `"format": "webauthn-get"` as a FiPA-specific extension — this
-format identifier is not defined in [MCP-Elicitation] itself, but a First-Party
-agent MAY implement recognition of it as a FiPA-specific capability.
-
-The authorization server encodes all `PublicKeyCredentialRequestOptions` fields
-([WebAuthn] §5.5) as `x-webauthn-*` extension properties on the assertion
-field. The field names mirror the W3C WebAuthn Level 3 specification [WebAuthn].
-
-~~~ json
-{
-  "type": "string",
-  "title": "Passkey Assertion",
-  "format": "webauthn-get",
-  "x-webauthn-challenge": "<base64url-encoded challenge nonce>",
-  "x-webauthn-timeout": 60000,
-  "x-webauthn-rpId": "example.com",
-  "x-webauthn-allowCredentials": [
-    {
-      "type": "public-key",
-      "id": "<base64url-encoded credential ID>",
-      "transports": ["internal"]
-    }
-  ],
-  "x-webauthn-userVerification": "required",
-  "x-webauthn-extensions": {}
-}
-~~~
+TODO
 
 ## 8.2 Authorization Challenge Response
 
