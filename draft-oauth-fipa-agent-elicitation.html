@@ -1337,8 +1337,8 @@ implementation.<a href="#section-1.1-6.3.1" class="pilcrow">¶</a></p>
         <h3 id="name-12-human-to-agent-h2a-commu">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-12-human-to-agent-h2a-commu" class="section-name selfRef">1.2 Human-to-Agent (H2A) Communication Model</a>
         </h3>
-<p id="section-1.2-1">This extension addresses the Human-to-Agent (H2A) communication pattern, as
-described in <span>[<a href="#CAAM" class="cite xref">CAAM</a>]</span>.  In this pattern, a human user interacts with an AI Agent
+<p id="section-1.2-1">This extension addresses the Human-to-Agent (H2A) communication pattern.
+In this pattern, a human user interacts with an AI Agent
 that acts as a first-party OAuth client on their behalf.  The AI Agent
 orchestrates the FiPA challenge/response cycle but cannot independently
 satisfy authentication challenges that require human interaction — such as
@@ -1371,12 +1371,7 @@ server. Implementations MUST use application-specific mechanisms until FiPA
 defines a negotiation mechanism.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.3-2.3">
-            <p id="section-1.3-2.3.1">A new first-class Structured Elicitation mode for WebAuthn. The
-<code>"format": "webauthn-get"</code> mechanism defined in Section 8 is a
-FiPA-specific extension over the existing form mode.<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.3-2.4">
-            <p id="section-1.3-2.4.1">Changes to the FiPA wire format beyond the <code>elicitations</code> array extension.<a href="#section-1.3-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.3.1">Changes to the FiPA wire format beyond the <code>elicitations</code> array extension.<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1986,36 +1981,7 @@ ceremony is performed in-band: no browser, no redirect.<a href="#section-8-1" cl
         </h3>
 <p id="section-8.1-1">This section defines how the authorization server delivers WebAuthn challenge
 parameters to the agent through Structured Elicitation form mode.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">Structured Elicitation form mode (Section 4.3) <code>requestedSchema</code> supports
-string properties with <code>format</code> and <code>x-</code> (extension) properties. JSON Schema
-permits <code>x-</code> prefixed extension keywords. When using MCP Elicitation, the
-agent recognizes <code>"format": "webauthn-get"</code> as a FiPA-specific extension — this
-format identifier is not defined in <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> itself, but a First-Party
-agent MAY implement recognition of it as a FiPA-specific capability.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">The authorization server encodes all <code>PublicKeyCredentialRequestOptions</code> fields
-(<span>[<a href="#WebAuthn" class="cite xref">WebAuthn</a>]</span> §5.5) as <code>x-webauthn-*</code> extension properties on the assertion
-field. The field names mirror the W3C WebAuthn Level 3 specification <span>[<a href="#WebAuthn" class="cite xref">WebAuthn</a>]</span>.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<div class="lang-json sourcecode" id="section-8.1-4">
-<pre>
-{
-  "type": "string",
-  "title": "Passkey Assertion",
-  "format": "webauthn-get",
-  "x-webauthn-challenge": "&lt;base64url-encoded challenge nonce&gt;",
-  "x-webauthn-timeout": 60000,
-  "x-webauthn-rpId": "example.com",
-  "x-webauthn-allowCredentials": [
-    {
-      "type": "public-key",
-      "id": "&lt;base64url-encoded credential ID&gt;",
-      "transports": ["internal"]
-    }
-  ],
-  "x-webauthn-userVerification": "required",
-  "x-webauthn-extensions": {}
-}
-</pre><a href="#section-8.1-4" class="pilcrow">¶</a>
-</div>
+<p id="section-8.1-2">TODO<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization-challenge-response-3">
