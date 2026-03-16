@@ -13,15 +13,12 @@ metadata format for FiPA authorization challenge responses.  FiPA intentionally
 leaves authenticator metadata out of scope: the format in which the
 authorization server describes available authenticators and the inputs they
 require is undefined.  This gap prevents interoperable implementation by AI
-Agents, CLI tools, and other non-browser clients.
+Agents and other non-browser clients. 
+       The extension defines a transport-agnostic Structured Elicitation mechanism.
 Model Context Protocol (MCP) Elicitation   serves as the
-normative reference implementation of the Structured Elicitation mechanism.
-The extension addresses Human-to-Agent (H2A) communication patterns in which
-a human user interacts with an AI Agent acting as the FiPA client on their
-behalf.  The scope covers two strong authenticator types: Authenticator Apps
-(TOTP) and Passkeys (WebAuthn).  Password authentication is explicitly out of
-scope.  The same pattern is extensible to other authenticator types by defining
-additional  requestedSchema  structures. 
+normative runtime binding; a non-normative binding for HTTP-based AI Agent
+APIs is also provided.  The scope covers two authenticator types: Authenticator
+Apps (TOTP) and Passkeys (WebAuthn). 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="draft-embesozzi-oauth-fipa-agent-elicitation" name="ietf.draft">
@@ -1099,15 +1096,12 @@ metadata format for FiPA authorization challenge responses.  FiPA intentionally
 leaves authenticator metadata out of scope: the format in which the
 authorization server describes available authenticators and the inputs they
 require is undefined.  This gap prevents interoperable implementation by AI
-Agents, CLI tools, and other non-browser clients.
+Agents and other non-browser clients.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">The extension defines a transport-agnostic Structured Elicitation mechanism.
 Model Context Protocol (MCP) Elicitation <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> serves as the
-normative reference implementation of the Structured Elicitation mechanism.
-The extension addresses Human-to-Agent (H2A) communication patterns in which
-a human user interacts with an AI Agent acting as the FiPA client on their
-behalf.  The scope covers two strong authenticator types: Authenticator Apps
-(TOTP) and Passkeys (WebAuthn).  Password authentication is explicitly out of
-scope.  The same pattern is extensible to other authenticator types by defining
-additional <code>requestedSchema</code> structures.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+normative runtime binding; a non-normative binding for HTTP-based AI Agent
+APIs is also provided.  The scope covers two authenticator types: Authenticator
+Apps (TOTP) and Passkeys (WebAuthn).<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1165,9 +1159,6 @@ additional <code>requestedSchema</code> structures.<a href="#section-abstract-1"
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
                 <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-13-limitations" class="internal xref">1.3 Limitations</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.4">
-                <p id="section-toc.1-1.1.2.4.1"><a href="#section-1.4" class="auto internal xref">1.4</a>.  <a href="#name-14-deployment-types" class="internal xref">1.4 Deployment Types</a></p>
 </li>
             </ul>
 </li>
@@ -1304,6 +1295,10 @@ with MCP Elicitation <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Eli
 implementation.<a href="#section-1.1-6.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
+<p id="section-1.1-7">The Passkey challenge flow (Section 7) differs based on runtime capability:
+Third-Party agents (e.g., Claude, GitHub Copilot) use URL mode for an
+out-of-band browser ceremony; First-Party agents that control their runtime
+MAY perform the WebAuthn ceremony in-band via form mode.<a href="#section-1.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="human-to-agent-h2a-communication-model">
@@ -1346,32 +1341,6 @@ defines a negotiation mechanism.<a href="#section-1.3-2.1.1" class="pilcrow">¶<
         </ul>
 </section>
 </div>
-<div id="deployment-types">
-<section id="section-1.4">
-        <h3 id="name-14-deployment-types">
-<a href="#section-1.4" class="section-number selfRef">1.4. </a><a href="#name-14-deployment-types" class="section-name selfRef">1.4 Deployment Types</a>
-        </h3>
-<p id="section-1.4-1">This document organizes the extension around two deployment types.<a href="#section-1.4-1" class="pilcrow">¶</a></p>
-<p id="section-1.4-2"><strong>Third-Party AI Agent</strong><a href="#section-1.4-2" class="pilcrow">¶</a></p>
-<p id="section-1.4-3">The agent runtime is a third-party product (e.g., Claude, GitHub Copilot in
-VS Code). The implementer controls the server-side components and authorization
-server but cannot modify the client runtime. The runtime supports standard
-Structured Elicitation form mode and URL mode as defined in <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span>.
-No custom elicitation handling can be added.<a href="#section-1.4-3" class="pilcrow">¶</a></p>
-<p id="section-1.4-4">For Passkeys, the runtime cannot invoke a WebAuthn API. The only available
-path is URL mode — an out-of-band browser interaction. Both Third-Party and
-First-Party deployments share the same <code>elicitations</code> wire format regardless
-of whether the runtime is MCP-based or API-based.<a href="#section-1.4-4" class="pilcrow">¶</a></p>
-<p id="section-1.4-5"><strong>First-Party AI Agent</strong><a href="#section-1.4-5" class="pilcrow">¶</a></p>
-<p id="section-1.4-6">The agent runtime is built and controlled by the implementer. It MAY implement
-custom handling for FiPA-specific elicitation extensions, including invoking
-the platform WebAuthn API. Structured Elicitation is used as the delivery
-channel for WebAuthn challenge metadata.<a href="#section-1.4-6" class="pilcrow">¶</a></p>
-<p id="section-1.4-7">For Passkeys, the agent can perform the WebAuthn ceremony in-band, with
-challenge parameters delivered through a FiPA extension to the form mode
-<code>requestedSchema</code>. No browser redirect is required.<a href="#section-1.4-7" class="pilcrow">¶</a></p>
-</section>
-</div>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1405,8 +1374,7 @@ specification.<a href="#section-2.1-2.2.1" class="pilcrow">¶</a></p>
           <li class="normal" id="section-2.1-2.3">
             <p id="section-2.1-2.3.1"><strong>Human-to-Agent (H2A) Communication:</strong> The interaction pattern in which a
 human user delegates actions to an AI Agent that acts as a first-party OAuth
-client. As described in <span>[<a href="#CAAM" class="cite xref">CAAM</a>]</span>, the agent orchestrates protocol flows on
-behalf of the user.<a href="#section-2.1-2.3.1" class="pilcrow">¶</a></p>
+client. The agent orchestrates protocol flows on behalf of the user.<a href="#section-2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-2.4">
             <p id="section-2.1-2.4.1"><strong>First-Party AI Agent:</strong> An AI agent whose client runtime is built and
@@ -1676,9 +1644,9 @@ WWW-Authenticate: Bearer realm="authorization-server",
 <p id="section-5-1">The following sections define the FiPA wire format for each authenticator type.
 Runtime-specific translation (e.g., MCP Elicitation) is defined in Section 4.3.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">When additional authentication is required, the first elicitation presents the
-available strong authenticators. Only phishing-resistant (Passkey/WebAuthn)
-and strong second-factor (TOTP) options are offered. Password authentication
-MUST NOT be included.<a href="#section-5-2" class="pilcrow">¶</a></p>
+available authenticators. This specification defines elicitation schemas for
+two authenticator types: Passkey (WebAuthn) and Authenticator App (TOTP).
+Password authentication is outside the scope of this document.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="authorization-challenge-response">
 <section id="section-5.1">
         <h3 id="name-51-authorization-challenge-">
@@ -1774,8 +1742,7 @@ Content-Type: application/json
       <h2 id="name-6-totp-challenge">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-6-totp-challenge" class="section-name selfRef">6. TOTP Challenge</a>
       </h2>
-<p id="section-6-1">TOTP works identically for both Third-Party and First-Party AI Agents. Form
-mode is sufficient: the challenge is a 6-digit numeric code, expressible as a
+<p id="section-6-1">TOTP uses form mode: the challenge is a 6-digit numeric code, expressible as a
 plain string with <code>pattern</code> and length constraints.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="authorization-challenge-response-1">
 <section id="section-6.1">
