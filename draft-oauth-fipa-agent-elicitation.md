@@ -81,13 +81,6 @@ behalf.  The scope covers two strong authenticator types: Authenticator Apps
 scope.  The same pattern is extensible to other authenticator types by defining
 additional `requestedSchema` structures.
 
-The extension is specified across two deployment types: Third-Party AI Agents
-(e.g., Claude, GitHub Copilot), where the client runtime is provided by a
-third party and cannot be modified; and First-Party AI Agents, where the
-implementer controls the agent code.  Both deployment types share the same
-FiPA challenge/response wire format and Structured Elicitation protocol,
-differing only in Passkey handling.
-
 --- middle
 
 # 1. Introduction
@@ -141,8 +134,6 @@ the scope of this specification.
 
 This document does not define:
 
-- Password authentication. Password credentials MUST NOT be included in the
-  `elicitations` array.
 - Capability negotiation between the agent runtime and the authorization
   server. Implementations MUST use application-specific mechanisms until FiPA
   defines a negotiation mechanism.
@@ -206,12 +197,6 @@ This document uses terminology defined in [RFC6749], [FiPA], and
 - **Third-Party AI Agent:** An AI agent whose client runtime is a product
   provided by a third party (e.g., Claude, GitHub Copilot). The implementer
   cannot modify client elicitation handling.
-- **Authorization Challenge Response:** An HTTP 400 response from the
-  authorization server carrying `"error": "insufficient_authorization"`
-  and an `auth_session` binding token, as defined in [FiPA].
-- **Authorization Challenge Request:** An HTTP POST from the agent runtime
-  to the authorization server carrying an `auth_session` and credential
-  response, as defined in [FiPA].
 
 # 3. Protocol Overview
 
@@ -522,80 +507,34 @@ Content-Type: application/json
 On success, the authorization server issues an OAuth token with the
 authenticated ACR value, per [FiPA].
 
-# 7. Passkey Challenge — Third-Party AI Agent
+# 7. Passkey Challenge
 
 In a Third-Party AI Agent deployment, the client runtime is a product the
 implementer does not control. It supports standard Structured Elicitation form
 mode and URL mode but cannot be extended with custom format handling or WebAuthn
 API invocation.
+For Third-Party AI Agents, URL mode SHOULD be used to redirect the user to a
+browser-based WebAuthn flow. The out-of-band WebAuthn ceremony is outside the
+scope of this specification. 
 
-WebAuthn requires a cryptographic ceremony: the authorization server generates
-a `challenge` nonce and `PublicKeyCredentialRequestOptions`; the client invokes
-the platform WebAuthn API; the platform authenticator returns a
-`PublicKeyCredential` assertion. Structured Elicitation form mode cannot
-express this ceremony within its supported `requestedSchema` primitive types.
-For Third-Party AI Agents, only URL mode is available for Passkeys.
+For in-band Passkey support, a First-Party AI Agent deployment is required.
+The implementer controls the agent code and MAY implement custom elicitation
+handling, including native WebAuthn API invocation using the OS or platform
+FIDO2 APIs ([FIDO-CTAP]). The WebAuthn ceremony is performed in-band: no
+browser, no redirect.
 
-## 7.1 Authorization Challenge Response
-
-The authorization server includes a URL mode elicitation entry for the Passkey
-step. The `url` points to an HTTPS endpoint that drives the full WebAuthn
-ceremony in a browser or webview. The WebAuthn assertion is submitted directly
-from the browser to the authorization server — it does not transit the agent
-channel.
-
-~~~ http
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
-  "elicitations": [
-    {
-      "mode": "url",
-      "message": "Complete Passkey authentication in the browser window.",
-      "url": "https://auth.example.com/webauthn/begin?auth_session=sess_abc123",
-      "elicitationId": "el-passkey-ent-001"
-    }
-  ]
-}
-~~~
-
-## 7.2 Out-of-Band Completion
-
-Once the browser opens the URL, the WebAuthn ceremony is handled entirely
-between the browser and the authorization server per [WebAuthn]. This is out
-of scope for this draft — the agent runtime and this extension play no role
-in it.
-
-## 7.3 Limitations
-
-| Limitation | Impact |
-|---|---|
-| Requires user browser access | The user MUST be able to open the URL in a browser. CLI clients can present the URL for manual opening, following the device flow pattern per [RFC8628]. |
-| Context switch | User leaves the AI Agent interface to complete the ceremony. |
-| Out-of-band result | The WebAuthn assertion does not transit the agent channel. The agent runtime MUST poll the authorization server (per [RFC8628] or [CIBA]) until the ceremony completes and a token is issued. |
-
-# 8. Passkey Challenge — First-Party AI Agent
-
-In a First-Party AI Agent deployment, the implementer controls the agent code.
-The agent MAY implement custom elicitation handling, including native WebAuthn
-API invocation using the OS or platform FIDO2 APIs ([FIDO-CTAP]). The WebAuthn
-ceremony is performed in-band: no browser, no redirect.
-
-## 8.1 WebAuthn Challenge Delivery
+## 7.1 WebAuthn Challenge Delivery
 
 This section defines how the authorization server delivers WebAuthn challenge
 parameters to the agent through Structured Elicitation form mode.
 
 TODO
 
-## 8.2 Authorization Challenge Response
+## 7.2 Authorization Challenge Response
 
 TODO
 
-# 10. Security Considerations
+# 8. Security Considerations
 
 TODO Security
 
