@@ -26,7 +26,7 @@ and First-Party AI Agent deployment patterns is included.
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Versions
 
