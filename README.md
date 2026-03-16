@@ -1,8 +1,8 @@
 # OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation
 
-**Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`
-**Status:** Individual Submission — Informational
-**Author:** Martin Besozzi (TwoGenIdentity)
+**Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`  
+**Status:** Individual Submission — Informational  
+**Author:** Martin Besozzi (TwoGenIdentity)  
 **Date:** 2026-03-09
 
 ## Abstract
@@ -26,13 +26,13 @@ and First-Party AI Agent deployment patterns is included.
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Versions
 
 | Date | Link |
 |------|------|
-| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Contributing
 
