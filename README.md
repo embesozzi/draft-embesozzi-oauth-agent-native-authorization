@@ -7,6 +7,12 @@
 
 ## Abstract
 
+AI Agents executing on behalf of users may encounter operations that require
+step-up authentication or explicit user approval — a just-in-time (JIT)
+authorization gate. Upon successful completion of the FiPA challenge/response
+cycle, the authorization server issues a token that serves as cryptographic
+proof of the user's consent, bound to the specific auth session.
+
 This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification, establishing a standard
 metadata format for FiPA authorization challenge responses. FiPA intentionally
@@ -15,12 +21,8 @@ authorization server describes available authenticators and the inputs they
 require is undefined. This gap prevents interoperable implementation by AI
 Agents and other non-browser clients.
 
-The extension defines a transport-agnostic Structured Elicitation mechanism.
-Model Context Protocol (MCP) Elicitation serves as the normative runtime
-binding; a non-normative binding for HTTP-based AI Agent APIs is also
-provided. The scope covers two strong authenticator types: Authenticator
-Apps (TOTP) and Passkeys (WebAuthn). Non-normative guidance for Third-Party
-and First-Party AI Agent deployment patterns is included.
+Model Context Protocol (MCP) Elicitation serves as the reference runtime
+binding and is the only binding normatively defined in this specification.
 
 ## Documents
 
