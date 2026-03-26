@@ -4,24 +4,19 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation</title>
+<title>OAuth 2.0 Agents Native Authorization via Structured Elicitation</title>
 <meta content="Martin Besozzi" name="author">
 <meta content="
-       AI Agents executing on behalf of users may encounter operations that require
-step-up authentication or explicit user approval — a just-in-time (JIT)
-authorization gate.  Upon successful completion of the FiPA challenge/response
-cycle, the authorization server issues a token that serves as cryptographic
-proof of the user's consent, bound to the specific auth session. 
        This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification  , establishing a standard
-metadata format for FiPA authorization challenge responses.  FiPA intentionally
-leaves authenticator metadata out of scope: the format in which the
-authorization server describes available authenticators and the inputs they
-require is undefined.  This gap prevents interoperable implementation by AI
-Agents and other non-browser clients. 
-       Model Context Protocol (MCP) Elicitation   serves as the
-reference runtime binding and is the only binding normatively defined in
-this specification. 
+metadata format for FiPA authorization challenge responses.  FiPA leaves the format
+for advertising available authenticators and their required inputs undefined,
+preventing interoperable implementation by AI Agents and other non-browser
+clients. This extension adds an  elicitations  array to the FiPA Authorization
+Challenge Response, providing a standard metadata format for authenticator
+challenges. Model Context Protocol (MCP) Elicitation   is the
+normative reference binding. 
+       This specification covers the just-in-time (JIT) authorization for AI Agents executing on behalf of users in Human-to-Agent (H2A) flows. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="draft-embesozzi-oauth-fipa-agent-elicitation" name="ietf.draft">
@@ -1057,7 +1052,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">OAuth 2.0 FiPA Agent Elicitation</td>
+<td class="center">Agent Native Authorization</td>
 <td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
@@ -1090,24 +1085,19 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation</h1>
+<h1 id="title">OAuth 2.0 Agents Native Authorization via Structured Elicitation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">AI Agents executing on behalf of users may encounter operations that require
-step-up authentication or explicit user approval — a just-in-time (JIT)
-authorization gate.  Upon successful completion of the FiPA challenge/response
-cycle, the authorization server issues a token that serves as cryptographic
-proof of the user's consent, bound to the specific auth session.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">This document defines a Structured Elicitation extension to the OAuth 2.0
+<p id="section-abstract-1">This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>, establishing a standard
-metadata format for FiPA authorization challenge responses.  FiPA intentionally
-leaves authenticator metadata out of scope: the format in which the
-authorization server describes available authenticators and the inputs they
-require is undefined.  This gap prevents interoperable implementation by AI
-Agents and other non-browser clients.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">Model Context Protocol (MCP) Elicitation <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> serves as the
-reference runtime binding and is the only binding normatively defined in
-this specification.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+metadata format for FiPA authorization challenge responses.  FiPA leaves the format
+for advertising available authenticators and their required inputs undefined,
+preventing interoperable implementation by AI Agents and other non-browser
+clients. This extension adds an <code>elicitations</code> array to the FiPA Authorization
+Challenge Response, providing a standard metadata format for authenticator
+challenges. Model Context Protocol (MCP) Elicitation <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> is the
+normative reference binding.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This specification covers the just-in-time (JIT) authorization for AI Agents executing on behalf of users in Human-to-Agent (H2A) flows.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1155,16 +1145,13 @@ this specification.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
                 <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-applicability" class="internal xref">Applicability</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
                 <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-human-to-agent-h2a-communic" class="internal xref">Human-to-Agent (H2A) Communication Model</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.3">
-                <p id="section-toc.1-1.1.2.3.1" class="keepWithNext"><a href="#section-1.3" class="auto internal xref">1.3</a>.  <a href="#name-limitations" class="internal xref">Limitations</a></p>
 </li>
             </ul>
 </li>
@@ -1183,37 +1170,34 @@ this specification.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-elicitation-extension" class="internal xref">Elicitation Extension</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-the-elicitations-array" class="internal xref">The <code>elicitations</code> Array</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-response-format" class="internal xref">Response Format</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
-                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-the-response-parameter" class="internal xref">The <code>response</code> Parameter</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-request-content-type-for-in" class="internal xref">Request Content Type for Intermediate Requests</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
-                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-request-content-type-for-in" class="internal xref">Request Content Type for Intermediate Requests</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-elicitation-sequencing" class="internal xref">Elicitation Sequencing</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-clients-without-structured-" class="internal xref">Clients Without Structured Elicitation Support</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-elicitation-sequencing" class="internal xref">Elicitation Sequencing</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-runtime-bindings" class="internal xref">Runtime Bindings</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-runtime-bindings" class="internal xref">Runtime Bindings</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.1">
-                    <p id="section-toc.1-1.4.2.3.2.1.1"><a href="#section-4.3.1" class="auto internal xref">4.3.1</a>.  <a href="#name-mcp-elicitation-binding" class="internal xref">MCP Elicitation Binding</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-mcp-elicitation-binding" class="internal xref">MCP Elicitation Binding</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3.2.2">
-                    <p id="section-toc.1-1.4.2.3.2.2.1"><a href="#section-4.3.2" class="auto internal xref">4.3.2</a>.  <a href="#name-http-api-binding" class="internal xref">HTTP API Binding</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
+                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-http-api-binding" class="internal xref">HTTP API Binding</a></p>
 </li>
                 </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
-                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-clients-without-structured-" class="internal xref">Clients Without Structured Elicitation Support</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-authenticator-selection" class="internal xref">Authenticator Selection</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-authorization-challenge-pro" class="internal xref">Authorization Challenge Protocol</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-authorization-challenge-res" class="internal xref">Authorization Challenge Response</a></p>
@@ -1224,46 +1208,43 @@ this specification.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-totp-challenge" class="internal xref">TOTP Challenge</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-authorization-challenge-resp" class="internal xref">Authorization Challenge Response</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-authorization-challenge-requ" class="internal xref">Authorization Challenge Request</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-passkey-challenge" class="internal xref">Passkey Challenge</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-webauthn-challenge-delivery" class="internal xref">WebAuthn Challenge Delivery</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-authorization-challenge-respo" class="internal xref">Authorization Challenge Response</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-appendix" class="internal xref">Appendix</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-examples" class="internal xref">Examples</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.1">
+                    <p id="section-toc.1-1.9.2.1.2.1.1"><a href="#appendix-A.1.1" class="auto internal xref">A.1.1</a>.  <a href="#name-authenticator-selection" class="internal xref">Authenticator Selection</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.2">
+                    <p id="section-toc.1-1.9.2.1.2.2.1"><a href="#appendix-A.1.2" class="auto internal xref">A.1.2</a>.  <a href="#name-totp-challenge" class="internal xref">TOTP Challenge</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1.2.3">
+                    <p id="section-toc.1-1.9.2.1.2.3.1"><a href="#appendix-A.1.3" class="auto internal xref">A.1.3</a>.  <a href="#name-passkey-challenge" class="internal xref">Passkey Challenge</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1284,7 +1265,7 @@ operations from sensitive ones.  When an agent encounters an operation
 requiring step-up authentication or explicit user approval, a just-in-time
 (JIT) authorization gate is needed: the agent must pause, surface a structured
 challenge to the human user, and obtain a cryptographic proof — an OAuth token
-— before proceeding.  The FiPA specification (<span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>) provides the
+— before proceeding.  The FiPA specification <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span> provides the
 challenge/response wire protocol for this gate.  This extension defines the
 metadata format that makes FiPA challenges machine-readable for agent runtimes.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">This extension applies when the client is an AI Agent acting on behalf of a
@@ -1316,24 +1297,6 @@ present document is scoped to H2A interactions; A2A authorization is outside
 the scope of this specification.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="limitations">
-<section id="section-1.3">
-        <h3 id="name-limitations">
-<a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-limitations" class="section-name selfRef">Limitations</a>
-        </h3>
-<p id="section-1.3-1">This document does not define:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-1.3-2.1">
-            <p id="section-1.3-2.1.1">Capability negotiation between the agent runtime and the authorization
-server. Implementations MUST use application-specific mechanisms until FiPA
-defines a negotiation mechanism.<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.3-2.2">
-            <p id="section-1.3-2.2.1">Changes to the FiPA wire format beyond the <code>elicitations</code> array extension.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1358,27 +1321,35 @@ capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
             <p id="section-2.1-2.1.1"><strong>Authorization Server (AS):</strong> As defined in <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span>.<a href="#section-2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-2.2">
-            <p id="section-2.1-2.2.1"><strong>Structured Elicitation:</strong> The abstract mechanism by which an agent runtime
+            <p id="section-2.1-2.2.1"><strong>Just-In-Time (JIT) Authorization:</strong> An authorization pattern in which a
+fresh credential challenge is issued at the moment a sensitive action is
+attempted, rather than relying solely on the trust established at initial
+authentication. This extension enables JIT Authorization by providing the
+structured metadata needed for agent runtimes to surface mid-flow challenges
+to the human user.<a href="#section-2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.1-2.3">
+            <p id="section-2.1-2.3.1"><strong>Structured Elicitation:</strong> The abstract mechanism by which an agent runtime
 requests structured user input mid-flow and returns a structured response.
 MCP Elicitation <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> is a conformant implementation of this
 mechanism and serves as the normative reference implementation for this
-specification.<a href="#section-2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.1-2.3">
-            <p id="section-2.1-2.3.1"><strong>Human-to-Agent (H2A) Communication:</strong> The interaction pattern in which a
-human user delegates actions to an AI Agent that acts as a first-party OAuth
-client. The agent orchestrates protocol flows on behalf of the user.<a href="#section-2.1-2.3.1" class="pilcrow">¶</a></p>
+specification.<a href="#section-2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-2.4">
-            <p id="section-2.1-2.4.1"><strong>First-Party AI Agent:</strong> An AI agent whose client runtime is built and
-controlled by the same operator as the server-side components and
-authorization server. The agent MAY implement FiPA-specific elicitation
-extensions.<a href="#section-2.1-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-2.4.1"><strong>Human-to-Agent (H2A) Communication:</strong> The interaction pattern in which a
+human user delegates actions to an AI Agent that acts as a first-party OAuth
+client. The agent orchestrates protocol flows on behalf of the user.<a href="#section-2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-2.5">
-            <p id="section-2.1-2.5.1"><strong>Third-Party AI Agent:</strong> An AI agent whose client runtime is a product
-provided by a third party (e.g., Claude, GitHub Copilot). The implementer
-cannot modify client elicitation handling.<a href="#section-2.1-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-2.5.1"><strong>First-Party AI Agent:</strong> An AI agent whose client runtime is built and
+controlled by the same operator as the server-side components and
+authorization server. The agent MAY implement FiPA-specific elicitation
+extensions.<a href="#section-2.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-2.1-2.6">
+            <p id="section-2.1-2.6.1"><strong>Third-Party AI Agent:</strong> An AI agent whose client runtime is a product
+provided by a third party. The implementer
+cannot modify client elicitation handling.<a href="#section-2.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1408,35 +1379,15 @@ Content-Type: application/json
 context. FiPA supports multi-step flows via continued challenge/response cycles
 on the same <code>auth_session</code>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">This extension adds an <code>elicitations</code> array to the Authorization Challenge
-Response (Section 4). Each entry in <code>elicitations</code> carries a Structured
-Elicitation descriptor. When the agent runtime supports MCP Elicitation
-<span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span>, each entry maps directly to a pending <code>elicitation/create</code>
-call. The agent runtime acting as the FiPA client translates each entry into a
-Structured Elicitation request directed at the human user.<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Structured Elicitation defines two modes used by this extension:<a href="#section-3-5" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-6.1">
-          <p id="section-3-6.1.1"><strong>Form mode</strong> — in-band structured data collection. The server provides a
-<code>requestedSchema</code> (a restricted JSON Schema subset); the runtime renders a
-native form and returns structured content. Supported <code>requestedSchema</code> types
-are: <code>string</code> (with <code>title</code>, <code>description</code>, <code>minLength</code>, <code>maxLength</code>,
-<code>pattern</code>, <code>format</code>, <code>default</code>, <code>enum</code>, <code>oneOf</code>), <code>number</code>/<code>integer</code>,
-<code>boolean</code>, and flat arrays with <code>enum</code>/<code>anyOf</code>.<a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-3-6.2">
-          <p id="section-3-6.2.1"><strong>URL mode</strong> — out-of-band interaction. The server provides a URL the
-runtime opens in a browser or webview. The result is submitted externally;
-the response carries only an <code>action</code>.<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<p id="section-3-7">For URL mode, <code>mode</code> and <code>elicitationId</code> are REQUIRED in the elicitation
-params. URL mode responses carry no <code>content</code> — the interaction result is
-submitted directly from the browser context to the authorization server.<a href="#section-3-7" class="pilcrow">¶</a></p>
-<p id="section-3-8">Upon completion of the challenge/response cycle, the authorization server
+Response. Each entry in the array describes one authenticator challenge the
+human user must complete. The agent runtime translates each entry into a
+Structured Elicitation request directed at the human user, collects the
+response, and submits it in the next Authorization Challenge Request.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">Upon completion of the challenge/response cycle, the authorization server
 issues an authorization code or token bound to the <code>auth_session</code>.  This token
 serves as cryptographic proof that a human user satisfied the required
 authentication challenge at a specific point in time, enabling the MCP server
-to enforce JIT authorization before executing sensitive operations.<a href="#section-3-8" class="pilcrow">¶</a></p>
+to enforce JIT authorization before executing sensitive operations.<a href="#section-3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="elicitation-extension">
@@ -1444,16 +1395,14 @@ to enforce JIT authorization before executing sensitive operations.<a href="#sec
       <h2 id="name-elicitation-extension">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-elicitation-extension" class="section-name selfRef">Elicitation Extension</a>
       </h2>
-<div id="the-elicitations-array">
+<div id="response-format">
 <section id="section-4.1">
-        <h3 id="name-the-elicitations-array">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-the-elicitations-array" class="section-name selfRef">The <code>elicitations</code> Array</a>
+        <h3 id="name-response-format">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-response-format" class="section-name selfRef">Response Format</a>
         </h3>
-<p id="section-4.1-1">This extension adds an <code>elicitations</code> array to the FiPA
-<code>insufficient_authorization</code> error response. Each entry carries a Structured
-Elicitation descriptor. When the agent runtime supports MCP Elicitation
-<span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span>, each entry maps directly to a pending <code>elicitation/create</code>
-call.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-1">The <code>elicitations</code> array is added to the FiPA <code>insufficient_authorization</code>
+error response body. Each entry carries the parameters needed for the agent
+runtime to present a structured challenge to the human user.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
 <p id="section-4.1-2">Fields per entry:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
@@ -1469,112 +1418,97 @@ call.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>mode</code>
 </td>
-              <td class="text-left" rowspan="1" colspan="1">Yes</td>
-              <td class="text-left" rowspan="1" colspan="1">
-                <code>"form"</code> or <code>"url"</code>. Maps to Structured Elicitation <code>mode</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">Interaction mode. <code>"form"</code> for in-band structured data collection using a JSON Schema.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>message</code>
 </td>
-              <td class="text-left" rowspan="1" colspan="1">Yes</td>
-              <td class="text-left" rowspan="1" colspan="1">Human-readable prompt. Maps to Structured Elicitation <code>message</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">Human-readable prompt displayed to the user by the agent runtime.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>requestedSchema</code>
 </td>
               <td class="text-left" rowspan="1" colspan="1">Form mode only</td>
-              <td class="text-left" rowspan="1" colspan="1">JSON Schema for the form. Maps 1:1 to Structured Elicitation <code>requestedSchema</code>.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">
-                <code>url</code>
-</td>
-              <td class="text-left" rowspan="1" colspan="1">URL mode only</td>
-              <td class="text-left" rowspan="1" colspan="1">Endpoint URL. Maps to Structured Elicitation <code>url</code>.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">
-                <code>elicitationId</code>
-</td>
-              <td class="text-left" rowspan="1" colspan="1">URL mode only</td>
-              <td class="text-left" rowspan="1" colspan="1">Unique ID for out-of-band completion tracking. Maps to Structured Elicitation <code>elicitationId</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">A restricted JSON Schema object describing the fields the user must fill in. Maps 1:1 to the Structured Elicitation <code>requestedSchema</code>.</td>
             </tr>
           </tbody>
         </table>
-<div id="the-response-parameter">
-<section id="section-4.1.1">
-          <h4 id="name-the-response-parameter">
-<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-the-response-parameter" class="section-name selfRef">The <code>response</code> Parameter</a>
-          </h4>
-<p id="section-4.1.1-1">When the client submits an Authorization Challenge Request in response to an
-<code>elicitations</code> entry, the collected credential fields are carried in a <code>response</code>
-parameter in the request body. The <code>response</code> parameter is a JSON object whose
-properties correspond to the field names defined in the <code>requestedSchema</code> of the
-elicitation entry that prompted the request.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-2">For example, if the <code>requestedSchema</code> defines a field named <code>otp</code>, the
-corresponding Authorization Challenge Request carries:<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
-<div class="lang-json sourcecode" id="section-4.1.1-3">
-<pre>
-{ "response": { "otp": "847291" } }
-</pre><a href="#section-4.1.1-3" class="pilcrow">¶</a>
-</div>
-<p id="section-4.1.1-4">The <code>response</code> parameter is a new parameter introduced by this extension and
-MUST be included in all intermediate Authorization Challenge Requests that
-carry elicitation content.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-4.1-4">Note: A <code>"url"</code> mode (out-of-band browser interaction) is defined in
+<span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span> and may be used in future revisions of this specification
+for authenticator types that require a browser ceremony (e.g., Passkeys in
+runtimes that cannot invoke the WebAuthn API natively).<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 <div id="request-content-type-for-intermediate-requests">
-<section id="section-4.1.2">
+<section id="section-4.1.1">
           <h4 id="name-request-content-type-for-in">
-<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-request-content-type-for-in" class="section-name selfRef">Request Content Type for Intermediate Requests</a>
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-request-content-type-for-in" class="section-name selfRef">Request Content Type for Intermediate Requests</a>
           </h4>
-<p id="section-4.1.2-1">The initial Authorization Challenge Request MUST use
+<p id="section-4.1.1-1">The initial Authorization Challenge Request MUST use
 <code>application/x-www-form-urlencoded</code> as required by <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>. Intermediate
 requests — those that carry an <code>auth_session</code> obtained from a prior challenge
 response — MAY use <code>application/json</code> as the content type.  This is consistent
 with <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>, which explicitly permits intermediate requests to use a different
-format than the initial request.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
+format than the initial request.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="elicitation-sequencing">
-<section id="section-4.2">
-        <h3 id="name-elicitation-sequencing">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-elicitation-sequencing" class="section-name selfRef">Elicitation Sequencing</a>
-        </h3>
-<p id="section-4.2-1">The <code>elicitations</code> array typically contains one entry at a time. Because
+<section id="section-4.1.2">
+          <h4 id="name-elicitation-sequencing">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-elicitation-sequencing" class="section-name selfRef">Elicitation Sequencing</a>
+          </h4>
+<p id="section-4.1.2-1">The <code>elicitations</code> array typically contains one entry at a time. Because
 subsequent steps depend on prior user selections (e.g., choosing TOTP versus
 Passkey changes the next challenge), the authorization server issues each
 step's elicitation in a new Authorization Challenge Response after the
-preceding credential is submitted.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+preceding credential is submitted.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="clients-without-structured-elicitation-support">
+<section id="section-4.1.3">
+          <h4 id="name-clients-without-structured-">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-clients-without-structured-" class="section-name selfRef">Clients Without Structured Elicitation Support</a>
+          </h4>
+<p id="section-4.1.3-1">For clients that do not support Structured Elicitation, the authorization
+server returns a standard OAuth error response per <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> §5.2. The
+<code>WWW-Authenticate</code> response header per <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> §5.2 is one example of how
+the error is surfaced at the HTTP level:<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-4.1.3-2">
+<pre>
+WWW-Authenticate: Bearer realm="authorization-server",
+                  error="insufficient_scope",
+                  auth_session="sess_abc123"
+</pre><a href="#section-4.1.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="runtime-bindings">
-<section id="section-4.3">
+<section id="section-4.2">
         <h3 id="name-runtime-bindings">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-runtime-bindings" class="section-name selfRef">Runtime Bindings</a>
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-runtime-bindings" class="section-name selfRef">Runtime Bindings</a>
         </h3>
-<p id="section-4.3-1">The <code>elicitations</code> array is a transport-agnostic FiPA extension. The agent
+<p id="section-4.2-1">The <code>elicitations</code> array is a transport-agnostic FiPA extension. The agent
 runtime is responsible for translating each entry into its native interaction
-mechanism. This section defines bindings for known runtimes.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+mechanism. This section defines bindings for known runtimes.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <div id="mcp-elicitation-binding">
-<section id="section-4.3.1">
+<section id="section-4.2.1">
           <h4 id="name-mcp-elicitation-binding">
-<a href="#section-4.3.1" class="section-number selfRef">4.3.1. </a><a href="#name-mcp-elicitation-binding" class="section-name selfRef">MCP Elicitation Binding</a>
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-mcp-elicitation-binding" class="section-name selfRef">MCP Elicitation Binding</a>
           </h4>
-<p id="section-4.3.1-1">When the agent runtime is MCP-based, the runtime (acting as the FiPA client)
+<p id="section-4.2.1-1">When the agent runtime is MCP-based, the runtime (acting as the FiPA client)
 maps each <code>elicitations</code> entry directly to an <code>elicitation/create</code> params
 object per <span>[<a href="#MCP-Elicitation" class="cite xref">MCP-Elicitation</a>]</span>. The <code>jsonrpc</code>, <code>id</code>, and <code>method</code> fields are MCP
 transport framing — the <code>params</code> content is identical to the <code>elicitations</code>
-entry.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.3.1-2">The following example shows a form mode elicitation entry from the
+entry.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-2">The following example shows a form mode elicitation entry from the
 Authorization Challenge Response alongside the resulting <code>elicitation/create</code>
-call:<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.3.1-3">FiPA <code>elicitations</code> entry (from Authorization Challenge Response):<a href="#section-4.3.1-3" class="pilcrow">¶</a></p>
-<div class="lang-json sourcecode" id="section-4.3.1-4">
+call:<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-3">FiPA <code>elicitations</code> entry (from Authorization Challenge Response):<a href="#section-4.2.1-3" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.2.1-4">
 <pre>
 {
   "mode": "form",
@@ -1594,10 +1528,10 @@ call:<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
     "required": ["authenticator"]
   }
 }
-</pre><a href="#section-4.3.1-4" class="pilcrow">¶</a>
+</pre><a href="#section-4.2.1-4" class="pilcrow">¶</a>
 </div>
-<p id="section-4.3.1-5">Resulting MCP <code>elicitation/create</code> call issued by the MCP server:<a href="#section-4.3.1-5" class="pilcrow">¶</a></p>
-<div class="lang-json sourcecode" id="section-4.3.1-6">
+<p id="section-4.2.1-5">Resulting MCP <code>elicitation/create</code> call issued by the MCP server:<a href="#section-4.2.1-5" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.2.1-6">
 <pre>
 {
   "jsonrpc": "2.0",
@@ -1622,10 +1556,10 @@ call:<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
     }
   }
 }
-</pre><a href="#section-4.3.1-6" class="pilcrow">¶</a>
+</pre><a href="#section-4.2.1-6" class="pilcrow">¶</a>
 </div>
-<p id="section-4.3.1-7">MCP client response:<a href="#section-4.3.1-7" class="pilcrow">¶</a></p>
-<div class="lang-json sourcecode" id="section-4.3.1-8">
+<p id="section-4.2.1-7">MCP client response:<a href="#section-4.2.1-7" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-4.2.1-8">
 <pre>
 {
   "jsonrpc": "2.0",
@@ -1635,14 +1569,14 @@ call:<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
     "content": { "authenticator": "totp" }
   }
 }
-</pre><a href="#section-4.3.1-8" class="pilcrow">¶</a>
+</pre><a href="#section-4.2.1-8" class="pilcrow">¶</a>
 </div>
 <div id="mcp-elicitation-flow-example">
-<section id="section-4.3.1.1">
+<section id="section-4.2.1.1">
             <h5 id="name-mcp-elicitation-flow-exampl">
-<a href="#section-4.3.1.1" class="section-number selfRef">4.3.1.1. </a><a href="#name-mcp-elicitation-flow-exampl" class="section-name selfRef">MCP Elicitation Flow Example</a>
+<a href="#section-4.2.1.1" class="section-number selfRef">4.2.1.1. </a><a href="#name-mcp-elicitation-flow-exampl" class="section-name selfRef">MCP Elicitation Flow Example</a>
             </h5>
-<div class="alignLeft art-text artwork" id="section-4.3.1.1-1">
+<div class="alignLeft art-text artwork" id="section-4.2.1.1-1">
 <pre>
    Human        AI Agent        MCP Server        Authorization Server
      |               |               |                      |
@@ -1690,116 +1624,86 @@ call:<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
      |               |               |  Token Response      |
      |               |               |&lt;---------------------|
      |               |               |                      |
-</pre><a href="#section-4.3.1.1-1" class="pilcrow">¶</a>
+</pre><a href="#section-4.2.1.1-1" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 </section>
 </div>
 <div id="http-api-binding">
-<section id="section-4.3.2">
+<section id="section-4.2.2">
           <h4 id="name-http-api-binding">
-<a href="#section-4.3.2" class="section-number selfRef">4.3.2. </a><a href="#name-http-api-binding" class="section-name selfRef">HTTP API Binding</a>
+<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-http-api-binding" class="section-name selfRef">HTTP API Binding</a>
           </h4>
-<p id="section-4.3.2-1">TODO: future section<a href="#section-4.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.2-1">TODO: future section<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
 </section>
-</div>
-</section>
-</div>
-<div id="clients-without-structured-elicitation-support">
-<section id="section-4.4">
-        <h3 id="name-clients-without-structured-">
-<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-clients-without-structured-" class="section-name selfRef">Clients Without Structured Elicitation Support</a>
-        </h3>
-<p id="section-4.4-1">For clients that do not support Structured Elicitation, the authorization
-server returns a standard OAuth error response per <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> §5.2. The
-<code>WWW-Authenticate</code> response header per <span>[<a href="#RFC6749" class="cite xref">RFC6749</a>]</span> §5.2 is one example of how
-the error is surfaced at the HTTP level:<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<div class="lang-http sourcecode" id="section-4.4-2">
-<pre>
-WWW-Authenticate: Bearer realm="authorization-server",
-                  error="insufficient_scope",
-                  auth_session="sess_abc123"
-</pre><a href="#section-4.4-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 </section>
 </div>
-<div id="authenticator-selection">
+<div id="authorization-challenge-protocol">
 <section id="section-5">
-      <h2 id="name-authenticator-selection">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-authenticator-selection" class="section-name selfRef">Authenticator Selection</a>
+      <h2 id="name-authorization-challenge-pro">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-authorization-challenge-pro" class="section-name selfRef">Authorization Challenge Protocol</a>
       </h2>
-<p id="section-5-1">The following sections define the FiPA wire format for each authenticator type.
-Runtime-specific translation (e.g., MCP Elicitation) is defined in Section 4.3.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">When additional authentication is required, the first elicitation presents the
-available authenticators. This specification defines elicitation schemas for
-two authenticator types: Passkey (WebAuthn) and Authenticator App (TOTP).
-Password authentication is outside the scope of this document.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div id="authorization-challenge-response">
 <section id="section-5.1">
         <h3 id="name-authorization-challenge-res">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-authorization-challenge-res" class="section-name selfRef">Authorization Challenge Response</a>
         </h3>
-<p id="section-5.1-1">When multiple authenticators are supported, the authorization server returns a
-selection prompt:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<div class="lang-http sourcecode" id="section-5.1-2">
-<pre>
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
-  "elicitations": [
-    {
-      "mode": "form",
-      "message": "Additional verification is required. Select your authentication method.",
-      "requestedSchema": {
-        "type": "object",
-        "properties": {
-          "authenticator": {
-            "type": "string",
-            "title": "Authentication Method",
-            "oneOf": [
-              { "const": "totp", "title": "Authenticator App (TOTP)" },
-              { "const": "passkey", "title": "Passkey" }
-            ]
-          }
-        },
-        "required": ["authenticator"]
-      }
-    }
-  ]
-}
-</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
-</div>
-<p id="section-5.1-3">When only one authenticator is supported, the authorization server directly
-requests the required credential without presenting a choice:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">When the authorization server requires additional authentication, it returns an
+<code>insufficient_authorization</code> error response containing an <code>elicitations</code> array.
+Each entry in <code>elicitations</code> describes one structured challenge the agent runtime
+MUST present to the human user.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">The response includes the following parameters:<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Parameter</th>
+              <th class="text-left" rowspan="1" colspan="1">Required</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>error</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">MUST be <code>"insufficient_authorization"</code>.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>auth_session</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">Session identifier that MUST be included in all subsequent Authorization Challenge Requests for this context.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>elicitations</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">Array of elicitation objects. Each entry contains <code>mode</code>, <code>message</code>, and (for <code>"form"</code> mode) <code>requestedSchema</code>. See the Appendix for authenticator-specific schema examples.</td>
+            </tr>
+          </tbody>
+        </table>
 <div class="lang-http sourcecode" id="section-5.1-4">
 <pre>
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
+Cache-Control: no-store
 
 {
   "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
+  "auth_session": "&lt;session-identifier&gt;",
   "elicitations": [
     {
       "mode": "form",
-      "message": "Additional verification is required. Enter your one-time passcode.",
-      "requestedSchema": {
-        "type": "object",
-        "properties": {
-          "totp_code": {
-            "type": "string",
-            "title": "One-Time Passcode",
-            "description": "Enter the 6-digit code from your authenticator app."
-          }
-        },
-        "required": ["totp_code"]
-      }
+      "message": "&lt;human-readable prompt&gt;",
+      "requestedSchema": { ... }
     }
   ]
 }
@@ -1812,149 +1716,77 @@ Content-Type: application/json
         <h3 id="name-authorization-challenge-req">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authorization-challenge-req" class="section-name selfRef">Authorization Challenge Request</a>
         </h3>
-<div class="lang-http sourcecode" id="section-5.2-1">
+<p id="section-5.2-1">After collecting user input via Structured Elicitation, the agent runtime
+submits an Authorization Challenge Request to the authorization challenge
+endpoint.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Parameter</th>
+              <th class="text-left" rowspan="1" colspan="1">Required</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>auth_session</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">The session identifier from the preceding Authorization Challenge Response.</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>response</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
+              <td class="text-left" rowspan="1" colspan="1">An object whose fields match the <code>requestedSchema</code> advertised in the corresponding <code>elicitations</code> entry.</td>
+            </tr>
+          </tbody>
+        </table>
+<div class="lang-http sourcecode" id="section-5.2-3">
 <pre>
 POST /as/authorization.oauth2
 Content-Type: application/json
 
 {
-  "auth_session": "sess_abc123",
-  "response": { "authenticator": "totp" }
+  "auth_session": "&lt;session-identifier&gt;",
+  "response": { ... }
 }
-</pre><a href="#section-5.2-1" class="pilcrow">¶</a>
+</pre><a href="#section-5.2-3" class="pilcrow">¶</a>
 </div>
-</section>
-</div>
-</section>
-</div>
-<div id="totp-challenge">
-<section id="section-6">
-      <h2 id="name-totp-challenge">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-totp-challenge" class="section-name selfRef">TOTP Challenge</a>
-      </h2>
-<p id="section-6-1">TOTP uses form mode: the challenge is a 6-digit numeric code, expressible as a
-plain string with <code>pattern</code> and length constraints.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="authorization-challenge-response-1">
-<section id="section-6.1">
-        <h3 id="name-authorization-challenge-resp">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-authorization-challenge-resp" class="section-name selfRef">Authorization Challenge Response</a>
-        </h3>
-<div class="lang-http sourcecode" id="section-6.1-1">
-<pre>
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
-  "elicitations": [
-    {
-      "mode": "form",
-      "message": "Enter the 6-digit code from your Authenticator App.",
-      "requestedSchema": {
-        "type": "object",
-        "properties": {
-          "otp": {
-            "type": "string",
-            "title": "One-Time Password",
-            "minLength": 6,
-            "maxLength": 6,
-            "pattern": "^[0-9]{6}$"
-          }
-        },
-        "required": ["otp"]
-      }
-    }
-  ]
-}
-</pre><a href="#section-6.1-1" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="authorization-challenge-request-1">
-<section id="section-6.2">
-        <h3 id="name-authorization-challenge-requ">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-authorization-challenge-requ" class="section-name selfRef">Authorization Challenge Request</a>
-        </h3>
-<div class="lang-http sourcecode" id="section-6.2-1">
-<pre>
-POST /as/authorization.oauth2
-Content-Type: application/json
-
-{
-  "auth_session": "sess_abc123",
-  "response": { "otp": "847291" }
-}
-</pre><a href="#section-6.2-1" class="pilcrow">¶</a>
-</div>
-<p id="section-6.2-2">On success, the authorization server issues an OAuth token with the
-authenticated ACR value, per <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="passkey-challenge">
-<section id="section-7">
-      <h2 id="name-passkey-challenge">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-passkey-challenge" class="section-name selfRef">Passkey Challenge</a>
-      </h2>
-<p id="section-7-1">In a Third-Party AI Agent deployment, the client runtime is a product the
-implementer does not control. It supports standard Structured Elicitation form
-mode and URL mode but cannot be extended with custom format handling or WebAuthn
-API invocation.
-For Third-Party AI Agents, URL mode SHOULD be used to redirect the user to a
-browser-based WebAuthn flow. The out-of-band WebAuthn ceremony is outside the
-scope of this specification.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">For in-band Passkey support, a First-Party AI Agent deployment is required.
-The implementer controls the agent code and MAY implement custom elicitation
-handling, including native WebAuthn API invocation using the OS or platform
-FIDO2 APIs (<span>[<a href="#FIDO-CTAP" class="cite xref">FIDO-CTAP</a>]</span>). The WebAuthn ceremony is performed in-band: no
-browser, no redirect.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<div id="webauthn-challenge-delivery">
-<section id="section-7.1">
-        <h3 id="name-webauthn-challenge-delivery">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-webauthn-challenge-delivery" class="section-name selfRef">WebAuthn Challenge Delivery</a>
-        </h3>
-<p id="section-7.1-1">This section defines how the authorization server delivers WebAuthn challenge
-parameters to the agent through Structured Elicitation form mode.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">TODO<a href="#section-7.1-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="authorization-challenge-response-2">
-<section id="section-7.2">
-        <h3 id="name-authorization-challenge-respo">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-authorization-challenge-respo" class="section-name selfRef">Authorization Challenge Response</a>
-        </h3>
-<p id="section-7.2-1">TODO<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">On success, the authorization server issues an OAuth token bound to the
+completed <code>auth_session</code>, per <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-8">
+<section id="section-6">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1">TODO Security<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">TBD<a href="#section-6-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-9">
+<section id="section-7">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-9-1">This document has no IANA actions.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">TBD<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-10">
+<section id="section-8">
       <h2 id="name-references">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-10.1">
+<section id="section-8.1">
         <h3 id="name-normative-references">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="FiPA">[FiPA]</dt>
@@ -1989,34 +1821,185 @@ parameters to the agent through Structured Elicitation form mode.<a href="#secti
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-10.2">
+<section id="section-8.2">
         <h3 id="name-informative-references">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="CIBA">[CIBA]</dt>
-        <dd>
-<span class="refAuthor">OpenID Foundation</span>, <span class="refTitle">"OpenID Connect Client-Initiated Backchannel Authentication Flow — Core 1.0"</span>, <span>n.d.</span>, <span>&lt;<a href="https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html">https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="EAP-ACR">[EAP-ACR]</dt>
-        <dd>
-<span class="refAuthor">OpenID Foundation</span>, <span class="refTitle">"OpenID Connect Extended Authentication Profile (EAP) ACR Values 1.0"</span>, <span>n.d.</span>, <span>&lt;<a href="https://openid.net/specs/openid-connect-eap-acr-values-1_0.html">https://openid.net/specs/openid-connect-eap-acr-values-1_0.html</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="FIDO-CTAP">[FIDO-CTAP]</dt>
-        <dd>
-<span class="refAuthor">FIDO Alliance</span>, <span class="refTitle">"Client to Authenticator Protocol (CTAP) 2.2"</span>, <span>n.d.</span>, <span>&lt;<a href="https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html">https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8628">[RFC8628]</dt>
       <dd>
-<span class="refAuthor">Denniss, W.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Jones, M.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"OAuth 2.0 Device Authorization Grant"</span>, <span class="seriesInfo">RFC 8628</span>, <span class="seriesInfo">DOI 10.17487/RFC8628</span>, <time datetime="2019-08" class="refDate">August 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8628">https://www.rfc-editor.org/rfc/rfc8628</a>&gt;</span>. </dd>
+<span class="refAuthor">OpenID Foundation</span>, <span class="refTitle">"OpenID Connect Extended Authentication Profile (EAP) ACR Values 1.0"</span>, <span>n.d.</span>, <span>&lt;<a href="https://openid.net/specs/openid-connect-eap-acr-values-1_0.html">https://openid.net/specs/openid-connect-eap-acr-values-1_0.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
 </section>
 </div>
-<div id="authors-addresses">
+<div id="appendix">
 <section id="appendix-A">
+      <h2 id="name-appendix">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-appendix" class="section-name selfRef">Appendix</a>
+      </h2>
+<div id="examples">
+<section id="appendix-A.1">
+        <h3 id="name-examples">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-examples" class="section-name selfRef">Examples</a>
+        </h3>
+<div id="authenticator-selection">
+<section id="appendix-A.1.1">
+          <h4 id="name-authenticator-selection">
+<a href="#appendix-A.1.1" class="section-number selfRef">A.1.1. </a><a href="#name-authenticator-selection" class="section-name selfRef">Authenticator Selection</a>
+          </h4>
+<p id="appendix-A.1.1-1">When additional authentication is required, the first elicitation typically
+presents the available authenticators. The following examples show the FiPA
+wire format for authenticator selection. This specification defines elicitation
+schemas for two authenticator types: Passkey (WebAuthn) and Authenticator App
+(TOTP). Password authentication is outside the scope of this document.<a href="#appendix-A.1.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1.1-2">When multiple authenticators are supported, the authorization server returns a
+selection prompt:<a href="#appendix-A.1.1-2" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="appendix-A.1.1-3">
+<pre>
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+  "error": "insufficient_authorization",
+  "auth_session": "sess_abc123",
+  "elicitations": [
+    {
+      "mode": "form",
+      "message": "Additional verification is required. Select your authentication method.",
+      "requestedSchema": {
+        "type": "object",
+        "properties": {
+          "authenticator": {
+            "type": "string",
+            "title": "Authentication Method",
+            "oneOf": [
+              { "const": "totp", "title": "Authenticator App (TOTP)" },
+              { "const": "passkey", "title": "Passkey" }
+            ]
+          }
+        },
+        "required": ["authenticator"]
+      }
+    }
+  ]
+}
+</pre><a href="#appendix-A.1.1-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1.1-4">The agent submits the user's selection:<a href="#appendix-A.1.1-4" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="appendix-A.1.1-5">
+<pre>
+POST /as/authorization.oauth2
+Content-Type: application/json
+
+{
+  "auth_session": "sess_abc123",
+  "response": { "authenticator": "totp" }
+}
+</pre><a href="#appendix-A.1.1-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="totp-challenge">
+<section id="appendix-A.1.2">
+          <h4 id="name-totp-challenge">
+<a href="#appendix-A.1.2" class="section-number selfRef">A.1.2. </a><a href="#name-totp-challenge" class="section-name selfRef">TOTP Challenge</a>
+          </h4>
+<p id="appendix-A.1.2-1">TOTP uses form mode: the challenge is a 6-digit numeric code, expressible as a
+plain string with <code>pattern</code> and length constraints.<a href="#appendix-A.1.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1.2-2">Authorization Challenge Response:<a href="#appendix-A.1.2-2" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="appendix-A.1.2-3">
+<pre>
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+  "error": "insufficient_authorization",
+  "auth_session": "sess_abc123",
+  "elicitations": [
+    {
+      "mode": "form",
+      "message": "Enter the 6-digit code from your Authenticator App.",
+      "requestedSchema": {
+        "type": "object",
+        "properties": {
+          "otp": {
+            "type": "string",
+            "title": "One-Time Password",
+            "minLength": 6,
+            "maxLength": 6,
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": ["otp"]
+      }
+    }
+  ]
+}
+</pre><a href="#appendix-A.1.2-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1.2-4">Authorization Challenge Request:<a href="#appendix-A.1.2-4" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="appendix-A.1.2-5">
+<pre>
+POST /as/authorization.oauth2
+Content-Type: application/json
+
+{
+  "auth_session": "sess_abc123",
+  "response": { "otp": "847291" }
+}
+</pre><a href="#appendix-A.1.2-5" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A.1.2-6">On success, the authorization server issues an OAuth token with the
+authenticated ACR value, per <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>.<a href="#appendix-A.1.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="passkey-challenge">
+<section id="appendix-A.1.3">
+          <h4 id="name-passkey-challenge">
+<a href="#appendix-A.1.3" class="section-number selfRef">A.1.3. </a><a href="#name-passkey-challenge" class="section-name selfRef">Passkey Challenge</a>
+          </h4>
+<p id="appendix-A.1.3-1">In a Third-Party AI Agent deployment, the client runtime is a product the
+implementer does not control. It supports standard Structured Elicitation form
+mode and URL mode but cannot be extended with custom format handling or WebAuthn
+API invocation.<a href="#appendix-A.1.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1.3-2">For Third-Party AI Agents, URL mode SHOULD be used to redirect the user to a
+browser-based WebAuthn flow. The out-of-band WebAuthn ceremony is outside the
+scope of this specification.<a href="#appendix-A.1.3-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1.3-3">For in-band Passkey support, a First-Party AI Agent deployment is required.
+The implementer controls the agent code and MAY implement custom elicitation
+handling, including native WebAuthn API invocation using the OS or platform
+FIDO2 APIs. The WebAuthn ceremony is performed in-band: no browser, no redirect.<a href="#appendix-A.1.3-3" class="pilcrow">¶</a></p>
+<div id="webauthn-challenge-delivery">
+<section id="appendix-A.1.3.1">
+            <h5 id="name-webauthn-challenge-delivery">
+<a href="#appendix-A.1.3.1" class="section-number selfRef">A.1.3.1. </a><a href="#name-webauthn-challenge-delivery" class="section-name selfRef">WebAuthn Challenge Delivery</a>
+            </h5>
+<p id="appendix-A.1.3.1-1">This section defines how the authorization server delivers WebAuthn challenge
+parameters to the agent through Structured Elicitation form mode.<a href="#appendix-A.1.3.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1.3.1-2">TBD<a href="#appendix-A.1.3.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authorization-challenge-response-1">
+<section id="appendix-A.1.3.2">
+            <h5 id="name-authorization-challenge-resp">
+<a href="#appendix-A.1.3.2" class="section-number selfRef">A.1.3.2. </a><a href="#name-authorization-challenge-resp" class="section-name selfRef">Authorization Challenge Response</a>
+            </h5>
+<p id="appendix-A.1.3.2-1">TBD<a href="#appendix-A.1.3.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>
