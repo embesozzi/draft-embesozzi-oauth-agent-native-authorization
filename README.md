@@ -3,15 +3,9 @@
 **Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`  
 **Status:** Individual Submission — Informational  
 **Author:** Martin Besozzi (TwoGenIdentity)  
-**Date:** 2026-03-09
+**Date:** 2026-04-01
 
 ## Abstract
-
-AI Agents executing on behalf of users may encounter operations that require
-step-up authentication or explicit user approval — a just-in-time (JIT)
-authorization gate. Upon successful completion of the FiPA challenge/response
-cycle, the authorization server issues a token that serves as cryptographic
-proof of the user's consent, bound to the specific auth session.
 
 This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification, establishing a standard
@@ -22,6 +16,12 @@ non-browser clients. This extension adds an `elicitations` array to the FiPA
 Authorization Challenge Response, providing a standard metadata format for
 authenticator challenges. Model Context Protocol (MCP) Elicitation is the
 normative reference binding.
+
+AI Agents executing on behalf of users may encounter operations that require
+step-up authentication or explicit user approval — a just-in-time (JIT)
+authorization gate. Upon successful completion of the FiPA challenge/response
+cycle, the authorization server issues a token that serves as cryptographic
+proof of the user's consent, bound to the specific auth session.
 
 This specification covers the just-in-time (JIT) authorization for AI Agents
 executing on behalf of users in Human-to-Agent (H2A) flows.
