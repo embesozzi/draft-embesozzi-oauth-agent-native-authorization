@@ -6,7 +6,7 @@ date: 2026-03-09
 category: info
 submissiontype: independent
 ipr: trust200902
-v: 3
+v: 0
 
 area: Security
 workgroup: Independent Submission
@@ -28,7 +28,7 @@ normative:
     author:
       org: IETF OAuth Working Group
   MCP-Elicitation:
-    target: https://spec.modelcontextprotocol.io
+    target: https://modelcontextprotocol.io/specification/
     title: "Model Context Protocol Specification — Elicitation"
     author:
       org: Anthropic

@@ -47,7 +47,3 @@ Feedback is welcome via GitHub Issues or Pull Requests.
 Martin Besozzi — [TwoGenIdentity](https://twogenidentity.com) —
 embesozzi@twogenidentity.com
 
----
-
-*This document is an independent submission Internet-Draft for community discussion. It is not an IETF or OpenID Foundation standards-track document.*
-
